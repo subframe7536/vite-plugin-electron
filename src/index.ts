@@ -12,6 +12,7 @@ import {
   withExternalBuiltins,
   treeKillSync,
 } from './utils'
+import type { StdioOptions, SpawnOptions } from 'node:child_process'
 
 // public utils
 export {
@@ -157,19 +158,23 @@ export default function electron(options: ElectronOptions | ElectronOptions[]): 
  */
 export async function startup(
   argv = ['.', '--no-sandbox'],
-  options?: import('node:child_process').SpawnOptions,
+  options?: SpawnOptions,
   customElectronPkg?: string,
 ) {
   const { spawn } = await import('node:child_process')
   // @ts-ignore
   const electron = await import(customElectronPkg ?? 'electron')
-  const electronPath = <any>(electron.default ?? electron)
+  const electronPath = (electron.default ?? electron)
 
   await startup.exit()
 
   // Start Electron.app
+  const stdio: StdioOptions = process.platform === 'linux'
+      // reserve file descriptor 3 for Chromium; put Node IPC on file descriptor 4
+      ? ['inherit', 'inherit', 'inherit', 'ignore', 'ipc']
+      : ['inherit', 'inherit', 'inherit', 'ipc']
   process.electronApp = spawn(electronPath, argv, {
-    stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+    stdio,
     ...options,
   })
 

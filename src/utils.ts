@@ -9,6 +9,7 @@ import {
   type ViteDevServer,
   mergeConfig,
 } from 'vite'
+import { loadPackageJSONSync } from 'local-pkg'
 import type { ElectronOptions } from '.'
 
 export interface PidTree {
@@ -19,7 +20,7 @@ export interface PidTree {
 
 /** Resolve the default Vite's `InlineConfig` for build Electron-Main */
 export function resolveViteConfig(options: ElectronOptions): InlineConfig {
-  const packageJson = resolvePackageJson() ?? {}
+  const packageJson = loadPackageJSONSync() ?? {}
   const esmodule = packageJson.type === 'module'
   const defaultConfig: InlineConfig = {
     // 🚧 Avoid recursive build caused by load config file
@@ -122,19 +123,6 @@ export function resolveServerUrl(server: ViteDevServer) {
       : `${protocol}://${hostname}:${port}${path}`
 
     return url
-  }
-}
-
-export function resolvePackageJson(root = process.cwd()): {
-  type?: 'module' | 'commonjs'
-  [key: string]: any
-} | null {
-  const packageJsonPath = path.join(root, 'package.json')
-  const packageJsonStr = fs.readFileSync(packageJsonPath, 'utf8')
-  try {
-    return JSON.parse(packageJsonStr)
-  } catch {
-    return null
   }
 }
 
