@@ -11,7 +11,7 @@ export interface NotBundleOptions {
 /**
  * @see https://github.com/vitejs/vite/blob/v4.4.7/packages/vite/src/node/utils.ts#L140
  */
-export const bareImportRE = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
+export const bareImportRE: RegExp = /^(?![a-zA-Z]:)[\w@](?!.*:\/\/)/
 
 /**
  * During dev, we exclude the `cjs` npm-pkg from bundle, mush like Vite :)

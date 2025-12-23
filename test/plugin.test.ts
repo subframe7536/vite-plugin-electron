@@ -1,12 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { build } from 'rolldown-vite'
+import { build } from 'vite'
 import {
   describe,
   expect,
   it,
 } from 'vitest'
-import { notBundle } from '../dist/plugin'
+import { notBundle } from "../src/plugin";
 
 const pluginNotBundle = notBundle()
 pluginNotBundle.apply = undefined

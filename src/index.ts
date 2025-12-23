@@ -46,7 +46,7 @@ export interface ElectronOptions {
   }) => void | Promise<void>
 }
 
-export function build(options: ElectronOptions) {
+export function build(options: ElectronOptions): ReturnType<typeof viteBuild> {
   return viteBuild(withExternalBuiltins(resolveViteConfig(options)))
 }
 
@@ -149,6 +149,13 @@ export default function electron(options: ElectronOptions | ElectronOptions[]): 
   ]
 }
 
+interface StartupFn {
+  (): Promise<void>
+  send: (message: string) => void;
+  hookedProcessExit: boolean;
+  exit: () => Promise<void>;
+}
+
 /**
  * Electron App startup function.
  * It will mount the Electron App child-process to `process.electronApp`.
@@ -156,11 +163,11 @@ export default function electron(options: ElectronOptions | ElectronOptions[]): 
  * @param options options for `child_process.spawn`
  * @param customElectronPkg custom electron package name (default: 'electron')
  */
-export async function startup(
+export const startup: StartupFn = async (
   argv = ['.', '--no-sandbox'],
   options?: SpawnOptions,
   customElectronPkg?: string,
-) {
+ ) => {
   const { spawn } = await import('node:child_process')
   // @ts-ignore
   const electron = await import(customElectronPkg ?? 'electron')

@@ -6,6 +6,7 @@ export default defineConfig({
     plugin: 'src/plugin.ts',
     simple: 'src/simple.ts',
   },
+  dts: { oxc: true },
   format: ['cjs', 'esm'],
   external: [
     'vite'

@@ -5,18 +5,19 @@ import {
   type UserConfig,
   mergeConfig,
 } from 'vite'
-import type { InputOption } from 'rollup'
+
 import electron, { type ElectronOptions } from '.'
+import { RolldownOptions } from './utils'
 
 export interface ElectronSimpleOptions {
   main: ElectronOptions
   preload?: Omit<ElectronOptions, 'entry'> & {
     /**
-     * Shortcut of `build.rollupOptions.input`.
+     * Shortcut of `build.rolldownOptions.input`.
      * 
-     * Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
+     * Preload scripts may contain Web assets, so use the `build.rolldownOptions.input` instead `build.lib.entry`.
      */
-    input: InputOption
+    input: RolldownOptions['input']
   }
   /**
    * Support use Node.js API in Electron-Renderer
@@ -46,8 +47,8 @@ export default async function electronSimple(options: ElectronSimpleOptions): Pr
       ...preloadOptions,
       vite: mergeConfig({
         build: {
-          rollupOptions: {
-            // `rollupOptions.input` has higher priority than `build.lib`.
+          rolldownOptions: {
+            // `rolldownOptions.input` has higher priority than `build.lib`.
             // @see - https://github.com/vitejs/vite/blob/v5.0.9/packages/vite/src/node/build.ts#L482
             input,
             output: {
