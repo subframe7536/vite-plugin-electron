@@ -17,9 +17,6 @@ describe('src/plugin', () => {
     await build({
       configFile: false,
       root: __dirname,
-      // experimental: {
-      //   enableNativePlugin: true
-      // },
       build: {
         lib: {
           entry: 'fixtures/external-main.ts',
