@@ -19,6 +19,7 @@ export {
   resolveViteConfig,
   withExternalBuiltins,
 }
+export { loadPackageJSON, loadPackageJSONSync } from 'local-pkg'
 
 export interface ElectronOptions {
   /**
@@ -58,7 +59,7 @@ export default function electron(options: ElectronOptions | ElectronOptions[]): 
 
   return [
     {
-      name: 'vite-plugin-electron',
+      name: 'vite-plugin-electron:dev',
       apply: 'serve',
       configureServer(server) {
         server.httpServer?.once('listening', () => {
@@ -118,7 +119,7 @@ export default function electron(options: ElectronOptions | ElectronOptions[]): 
       },
     },
     {
-      name: 'vite-plugin-electron',
+      name: 'vite-plugin-electron:prod',
       apply: 'build',
       config(config, env) {
         userConfig = config
