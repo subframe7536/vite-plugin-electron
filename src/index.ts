@@ -3,6 +3,7 @@ import {
   type ConfigEnv,
   type UserConfig,
   build as viteBuild,
+  version,
 } from 'vite'
 import {
   resolveServerUrl,
@@ -56,6 +57,12 @@ export default function electron(options: ElectronOptions | ElectronOptions[]): 
   let userConfig: UserConfig
   let configEnv: ConfigEnv
   let mockdInput: Awaited<ReturnType<typeof mockIndexHtml>> | undefined
+
+  if (!version.startsWith('8.')) {
+    throw new Error(
+      `[vite-plugin-electron] Vite v${version} does not support \`rolldownOptions\`, please install \`vite@>=8\` or use an earlier version of \`vite-plugin-electron\`.`,
+    )
+  }
 
   return [
     {
