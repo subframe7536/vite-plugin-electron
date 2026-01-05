@@ -6,10 +6,20 @@ export default defineConfig({
     plugin: 'src/plugin.ts',
     simple: 'src/simple.ts',
   },
+  outputOptions: {
+    exports: 'named'
+  },
   dts: { oxc: true },
   format: ['cjs', 'esm'],
   external: [
     'vite'
   ],
-  exports: true
+  exports: {
+    customExports(exports) {
+      exports["./electron-env"] = {
+        types: "./electron-env.d.ts"
+      }
+      return exports
+    },
+  }
 })

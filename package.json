@@ -19,7 +19,10 @@
       "require": "./dist/simple.cjs",
       "import": "./dist/simple.mjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./electron-env": {
+      "types": "./electron-env.d.ts"
+    }
   },
   "repository": {
     "type": "git",
@@ -36,7 +39,6 @@
     "prepublishOnly": "npm run build && npm run test"
   },
   "peerDependencies": {
-    "local-pkg": "^1.1.2",
     "vite-plugin-electron-renderer": "*"
   },
   "peerDependenciesMeta": {
@@ -44,12 +46,15 @@
       "optional": true
     }
   },
+  "dependencies": {
+    "local-pkg": "^1.1.2"
+  },
   "devDependencies": {
     "local-pkg": "^1.1.2",
     "@types/node": "^24.10.4",
-    "tsdown": "^0.18.2",
+    "tsdown": "^0.18.4",
     "typescript": "^5.9.3",
-    "vite": "^8.0.0-beta.4",
+    "vite": "^8.0.0-beta.5",
     "vite-plugin-electron-renderer": "^0.14.6",
     "vitest": "^4.0.16"
   },
@@ -64,5 +69,10 @@
     "plugin",
     "electron",
     "renderer"
-  ]
+  ],
+  "pnpm": {
+    "overrides": {
+      "vite": "^8.0.0-beta.5"
+    }
+  }
 }
