@@ -4,7 +4,7 @@ import cp from 'node:child_process'
 import type { AddressInfo } from 'node:net'
 import { builtinModules } from 'node:module'
 import {
-  BuildEnvironmentOptions,
+  type BuildEnvironmentOptions,
   type InlineConfig,
   type ResolvedConfig,
   type ViteDevServer,
@@ -157,7 +157,7 @@ export function resolveInput(config: ResolvedConfig): RolldownOptions['input'] |
 }
 
 /**
- * When run the `vite build` command, there must be an entry file. 
+ * When run the `vite build` command, there must be an entry file.
  * If the user does not need Renderer, we need to create a temporary entry file to avoid Vite throw error.
  * @inspired https://github.com/vitejs/vite/blob/v5.4.9/packages/vite/src/node/config.ts#L1234-L1236
  */
