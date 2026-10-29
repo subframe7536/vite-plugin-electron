@@ -1,0 +1,27 @@
+name: probe-win-shutdown
+
+on:
+  push:
+    branches:
+      - debug/win-shutdown-probe
+
+jobs:
+  probe:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: pnpm install
+      - name: probe quit (window)
+        working-directory: playground/shutdown
+        run: node scripts/probe-win.mjs quit
+      - name: probe exit (window)
+        working-directory: playground/shutdown
+        run: node scripts/probe-win.mjs exit
+      - name: probe quit (headless)
+        working-directory: playground/shutdown
+        run: node scripts/probe-win.mjs quit headless

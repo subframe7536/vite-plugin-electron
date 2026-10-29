@@ -479,7 +479,8 @@ function readWindowsProcessTable(): Map<number, number[]> | undefined {
     return parseWindowsProcessTable(
       execFileSync('wmic', ['process', 'get', 'ProcessId,ParentProcessId', '/FORMAT:CSV'], options),
     )
-  } catch {
+  } catch (error) {
+    console.error(`[probe] wmic failed: ${(error as Error).message.split('\n')[0]}`)
     // wmic is removed from recent Windows 10/11 builds; fall back to PowerShell (same CSV shape).
   }
   try {
@@ -538,7 +539,9 @@ export function killOrphanedChildrenSync(deadPid: number): number[] {
   if (process.platform !== 'win32' || !deadPid || deadPid <= 0) {
     return []
   }
-  const orphans = (readWindowsProcessTable()?.get(deadPid) ?? []).filter(
+  const table = readWindowsProcessTable()
+  console.error(`[probe] process table rows=${table ? [...table.values()].flat().length : 'undefined'}`)
+  const orphans = (table?.get(deadPid) ?? []).filter(
     (pid) => pid !== deadPid && pid !== process.pid,
   )
   for (const pid of orphans) {

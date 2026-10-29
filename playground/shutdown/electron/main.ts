@@ -112,6 +112,16 @@ app.whenReady().then(() => {
       app.quit()
     }, 1500)
   }
+  if (process.env.PROBE_AUTO === 'quit' || process.env.PROBE_AUTO === 'exit') {
+    setTimeout(() => {
+      logEvent(`probe auto ${process.env.PROBE_AUTO}`)
+      if (process.env.PROBE_AUTO === 'quit') {
+        app.quit()
+      } else {
+        process.exit(0)
+      }
+    }, 6000)
+  }
 })
 
 app.on('window-all-closed', () => {

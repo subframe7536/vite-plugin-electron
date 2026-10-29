@@ -107,7 +107,11 @@ function bindElectronExit(
   const handler: ElectronExitHandler = (code, signal) => {
     if (child.pid) {
       // Windows: detached helpers keep the stale parent id; reap them before the host exits.
-      killOrphanedChildrenSync(child.pid)
+      const t = Date.now()
+      const killed = killOrphanedChildrenSync(child.pid)
+      console.error(
+        `[probe] self-exit pid=${child.pid} code=${code} signal=${signal} orphans=${JSON.stringify(killed)} took=${Date.now() - t}ms`,
+      )
     }
     clearElectron(child, lifecycle)
     onExit(code, signal)
