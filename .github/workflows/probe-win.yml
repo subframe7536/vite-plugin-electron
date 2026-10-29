@@ -8,7 +8,10 @@ on:
 jobs:
   probe:
     runs-on: windows-latest
-    timeout-minutes: 20
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: playground/shutdown
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v6
@@ -16,12 +19,18 @@ jobs:
         with:
           node-version: 24
       - run: pnpm install
-      - name: probe quit (window)
-        working-directory: playground/shutdown
-        run: node scripts/probe-win.mjs quit
-      - name: probe exit (window)
-        working-directory: playground/shutdown
-        run: node scripts/probe-win.mjs exit
-      - name: probe quit (headless)
-        working-directory: playground/shutdown
-        run: node scripts/probe-win.mjs quit headless
+        working-directory: .
+      - run: node scripts/probe-win.mjs quit direct
+      - run: node scripts/probe-win.mjs exit direct
+      - run: node scripts/probe-win.mjs quit pnpm
+      - run: node scripts/probe-win.mjs exit pnpm
+      - run: node scripts/probe-win.mjs quit console
+      - run: node scripts/probe-win.mjs exit console
+      - name: install wmic
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          DISM /Online /Add-Capability /CapabilityName:WMIC~~~~ /NoRestart
+          wmic process get ProcessId,ParentProcessId /FORMAT:CSV | Select-Object -First 4
+      - run: node scripts/probe-win.mjs quit console
+      - run: node scripts/probe-win.mjs exit console

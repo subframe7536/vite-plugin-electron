@@ -65,6 +65,14 @@ refreshButton?.addEventListener('click', () => {
   void refreshState()
 })
 
+const probeClick = (window as any).process?.env?.PROBE_CLICK as string | undefined
+if (probeClick === 'quit' || probeClick === 'exit') {
+  setTimeout(() => {
+    console.log(`[probe] renderer clicking ${probeClick}`)
+    ;(probeClick === 'quit' ? quitButton : exitButton)?.click()
+  }, 6000)
+}
+
 void refreshState()
 setInterval(() => {
   void refreshState()
